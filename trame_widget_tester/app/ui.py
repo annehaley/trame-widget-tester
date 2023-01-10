@@ -1,6 +1,44 @@
-# from colormapper import ui as widget_ui
-from ..default_widget import ui as widget_ui
+from trame.ui.vuetify import SinglePageWithDrawerLayout
+from trame.widgets import vuetify
+from trame.widgets import vtk
+from trame.app import get_server
+
+from colormapper.widget import ColormapEditor
+
+server = get_server()
+state, ctrl = server.state, server.controller
 
 
 def initialize(server):
-    widget_ui.initialize(server)
+    ctrl = server.controller
+
+    with SinglePageWithDrawerLayout(server) as layout:
+        layout.title.set_text("Colormap Editor WIP")
+
+        with layout.toolbar:
+            vuetify.VSwitch(
+                v_model="$vuetify.theme.dark",
+                hide_details=True,
+                dense=True,
+            )
+
+        with layout.drawer as drawer:
+            drawer.width = 450
+            with vuetify.VContainer(classes="pa-5"):
+                ColormapEditor(
+                    histogram_data=("histogram_data",),
+                    colors=("colormap_points",),
+                    opacities=("opacity_points",),
+                    update_colors="colormap_points = $event",
+                    update_opacities="opacity_points = $event",
+                )
+
+        # Main content
+        with layout.content:
+            with vuetify.VContainer(fluid=True, classes="pa-0 fill-height"):
+                html_view = vtk.VtkRemoteView(ctrl.get_render_window())
+                ctrl.on_server_ready.add(html_view.update)
+                ctrl.view_update = html_view.update
+
+        # Footer
+        layout.footer.hide()
