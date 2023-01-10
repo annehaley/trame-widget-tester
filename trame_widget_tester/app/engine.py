@@ -1,4 +1,5 @@
-from colormapper import engine as widget_engine
+# from colormapper import engine as widget_engine
+from ..default_widget import engine as widget_engine
 
 from pathlib import Path
 import logging
@@ -10,4 +11,4 @@ DATASET_PATH = Path("data/skull.vti").absolute()
 
 
 def initialize(server):
-    widget_engine.initialize(server, DATASET_PATH)
+    widget_engine.initialize(server, dataset_path=DATASET_PATH)
