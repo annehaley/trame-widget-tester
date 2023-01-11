@@ -17,25 +17,34 @@ def initialize(server):
         layout.title.set_text("Trame Widget Tester")
 
         with layout.toolbar:
+            vuetify.VSpacer()
             vuetify.VSwitch(
                 v_model="$vuetify.theme.dark",
                 hide_details=True,
+                label="Dark Mode",
                 dense=True,
             )
 
         with layout.drawer as drawer:
             drawer.width = 450
             with vuetify.VContainer(classes="pa-5"):
-                ColormapEditor(
-                    histogram_data=("histogram_data",),
-                    colors=("colormap_points",),
-                    opacities=("opacity_points",),
-                    update_colors="colormap_points = $event",
-                    update_opacities="opacity_points = $event",
-                )
-                FileBrowser(
-                    attribute=("attribute",)
-                )
+                with vuetify.VTabs(centered=True):
+                    vuetify.VTab(children=["Color mapper"]),
+                    vuetify.VTab(children=["File browser"])
+                    vuetify.VTabItem(children=[
+                        ColormapEditor(
+                            histogram_data=("histogram_data",),
+                            colors=("colormap_points",),
+                            opacities=("opacity_points",),
+                            update_colors="colormap_points = $event",
+                            update_opacities="opacity_points = $event",
+                        )
+                    ])
+                    vuetify.VTabItem(children=[
+                        FileBrowser(
+                            attribute=("attribute",)
+                        )
+                    ])
 
         # Main content
         with layout.content:
