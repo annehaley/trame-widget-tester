@@ -28,10 +28,11 @@ def initialize(server):
         with layout.drawer as drawer:
             drawer.width = 450
             with vuetify.VContainer(classes="pa-5"):
-                with vuetify.VTabs(centered=True):
-                    vuetify.VTab(children=["Color mapper"]),
+                with vuetify.VTabs(grow=True, v_model=("tab", 0)):
+                    vuetify.VTab(children=["Color mapper"])
                     vuetify.VTab(children=["File browser"])
-                    vuetify.VTabItem(children=[
+                with vuetify.VTabsItems(v_model=("tab", 0)):
+                    with vuetify.VTabItem():
                         ColormapEditor(
                             histogram_data=("histogram_data",),
                             colors=("colormap_points",),
@@ -39,12 +40,31 @@ def initialize(server):
                             update_colors="colormap_points = $event",
                             update_opacities="opacity_points = $event",
                         )
-                    ])
-                    vuetify.VTabItem(children=[
+                    with vuetify.VTabItem():
                         FileBrowser(
-                            attribute=("attribute",)
+                            current_local_dir=("current_local_dir",),
+                            current_remote_dir=("current_remote_dir",),
+                            current_local_dir_contents=("current_local_dir_contents",),
+                            current_remote_dir_contents=("current_remote_dir_contents",),
+                            local_directories=("local_directories",),
+                            remote_directories=("remote_directories",),
+                            set_local_dir="current_local_dir = $event",
+                            set_remote_dir="current_remote_dir = $event",
+                            mode="Save",
+                            submit=("save")
                         )
-                    ])
+                        FileBrowser(
+                            current_local_dir=("current_local_dir",),
+                            current_remote_dir=("current_remote_dir",),
+                            current_local_dir_contents=("current_local_dir_contents",),
+                            current_remote_dir_contents=("current_remote_dir_contents",),
+                            local_directories=("local_directories",),
+                            remote_directories=("remote_directories",),
+                            set_local_dir="current_local_dir = $event",
+                            set_remote_dir="current_remote_dir = $event",
+                            mode="Open",
+                            submit=("open")
+                        )
 
         # Main content
         with layout.content:
