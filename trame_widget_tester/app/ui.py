@@ -48,10 +48,11 @@ def initialize(server):
                             current_remote_dir_contents=("current_remote_dir_contents",),
                             local_directories=("local_directories",),
                             remote_directories=("remote_directories",),
+                            file_types=("file_types",),
                             set_local_dir="current_local_dir = $event",
                             set_remote_dir="current_remote_dir = $event",
                             mode="Save",
-                            submit=("save")
+                            submit=ctrl.save_file,
                         )
                         FileBrowser(
                             current_local_dir=("current_local_dir",),
@@ -63,7 +64,7 @@ def initialize(server):
                             set_local_dir="current_local_dir = $event",
                             set_remote_dir="current_remote_dir = $event",
                             mode="Open",
-                            submit=("open")
+                            submit=ctrl.open_file,
                         )
 
         # Main content
